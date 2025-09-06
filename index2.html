@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ลงทะเบียนรายวิชา</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      padding: 30px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+    }
+    img.profile {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin-bottom: 20px;
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    input {
+      width: 100%;
+      padding: 12px 15px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: #4CAF50;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .message {
+      margin-top: 15px;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img id="profileImg" class="profile" src="" alt="Profile">
+    <h1>ลงทะเบียนรายวิชา</h1>
+    <input type="text" id="studentId" placeholder="รหัสนักศึกษา">
+    <input type="text" id="courseId" placeholder="รหัสวิชา">
+    <button id="registerBtn">ลงทะเบียน</button>
+    <div class="message" id="msg"></div>
+  </div>
+
+  <script>
+    async function main() {
+      await liff.init({ liffId: "2008067509-A2Bo0BOO" });
+
+      // ดึง profile จาก LINE
+      if (liff.isLoggedIn()) {
+        const profile = await liff.getProfile();
+        document.getElementById("profileImg").src = profile.pictureUrl;
+      } else {
+        liff.login();
+      }
+
+      // กดลงทะเบียน
+      document.getElementById("registerBtn").onclick = () => {
+        const studentId = document.getElementById("studentId").value.trim();
+        const courseId = document.getElementById("courseId").value.trim();
+
+        if (!studentId || !courseId) {
+          document.getElementById("msg").textContent = "กรุณากรอกข้อมูลให้ครบ";
+          return;
+        }
+
+        // ตัวอย่าง: แสดง alert, สามารถส่งไป server หรือ n8n ได้
+        document.getElementById("msg").textContent = `รหัส ${studentId} ลงทะเบียนวิชา ${courseId} เรียบร้อย! 🎉`;
+
+        // ส่งข้อมูลไป server (ตัวอย่าง fetch)
+        /*
+        fetch('YOUR_SERVER_API', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ studentId, courseId })
+        }).then(res => res.json())
+          .then(data => console.log(data))
+        */
+      };
+    }
+
+    main();
+  </script>
+</body>
+</html>
